@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo">
+                <i class="fa-solid fa-sim-card"></i>
+                <span>OTP Manager</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Tab Navigation -->
+            <div class="tab-nav">
+                <button class="tab-btn active" data-tab="rent-tab"><i class="fa-solid fa-cart-plus"></i> Thuê
+                    số</button>
+                <button class="tab-btn" data-tab="settings-tab"><i class="fa-solid fa-gear"></i> Cài đặt</button>
+            </div>
+
+            <!-- Tab Content: Thuê số -->
+            <div id="rent-tab" class="tab-content active">
+                <section class="control-panel glass-panel">
+                    <h2><i class="fa-solid fa-gamepad"></i> Control Panel</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="service-select">Service</label>
+                            <select id="service-select">
+                                <option value="" disabled selected>Select a service</option>
+                                <!-- Options populated by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="network-select">Network (Optional)</label>
+                            <select id="network-select">
+                                <option value="">Any Network</option>
+                                <!-- Options populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="action-area">
+                        <button id="get-number-btn" class="btn accent-btn" disabled>
+                            <i class="fa-solid fa-cart-plus"></i> Get Number
+                        </button>
+                    </div>
+                </section>
+
+                <section class="active-session glass-panel hidden" id="active-session-panel">
+                    <div class="session-header">
+                        <h2><i class="fa-solid fa-bolt"></i> Active Session</h2>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <button id="refresh-session-btn" class="icon-btn-large" title="Refresh Status"><i
+                                    class="fa-solid fa-rotate"></i></button>
+                            <span class="status-badge" id="session-status">Waiting</span>
+                        </div>
+                    </div>
+
+                    <div class="session-details">
+                        <div class="detail-item">
+                            <span class="label">Phone Number</span>
+                            <div class="value-copy">
+                                <span id="current-phone" class="highlight-text">---</span>
+                                <button class="copy-btn" data-target="current-phone"><i
+                                        class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Service</span>
+                            <span id="current-service">---</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">OTP Code</span>
+                            <div class="value-copy">
+                                <span id="otp-code" class="otp-placeholder">Waiting for code...</span>
+                                <button class="copy-btn" data-target="otp-code"><i
+                                        class="fa-regular fa-copy"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="session-logs" id="session-logs">
+                        <!-- Logs will appear here -->
+                    </div>
+                </section>
+            </div>
+
+            <!-- Tab Content: Cài đặt -->
+            <div id="settings-tab" class="tab-content">
+                <section class="config-section glass-panel">
+                    <h2><i class="fa-solid fa-sliders"></i> Configuration</h2>
+                    <div class="form-group">
+                        <label for="api-token">API Token</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="api-token" placeholder="Enter your Viotp API Token" value="">
+                            <button id="toggle-token" class="icon-btn"><i class="fa-solid fa-eye"></i></button>
+                        </div>
+                        <button id="check-token-btn" class="btn primary-btn" style="margin-top: 1rem; width: 100%;">
+                            <i class="fa-solid fa-check-circle"></i> Check Token
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast-container"></div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
