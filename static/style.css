@@ -57,6 +57,24 @@ body {
     color: var(--accent-color);
 }
 
+.balance-display {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--success-color);
+    animation: slideIn 0.3s ease;
+}
+
+.balance-display .count {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
 /* Glass Panel */
 .glass-panel {
     background: var(--card-bg);

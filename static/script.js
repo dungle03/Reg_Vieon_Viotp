@@ -21,6 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sessionStatusEl = document.getElementById('session-status');
 
     const refreshSessionBtn = document.getElementById('refresh-session-btn');
+    const balanceContainer = document.getElementById('balance-container');
+    const availableCountEl = document.getElementById('available-count');
 
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -30,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tokenInput.value = apiToken;
         loadInitialData();
         restoreSession();
+        updateBalanceDisplay();
     }
 
     // Event Listeners
@@ -68,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.status_code === 200) {
                     showToast('Token is valid!', 'success');
                     loadInitialData();
+                    updateBalanceDisplay();
                 } else {
                     showToast('Invalid Token', 'error');
                 }
@@ -108,6 +112,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Functions
     async function loadInitialData() {
         await Promise.all([loadNetworks(), loadServices()]);
+    }
+
+    async function updateBalanceDisplay() {
+        if (!apiToken) return;
+        try {
+            const response = await fetch(`/api/balance?token=${apiToken}`);
+            const data = await response.json();
+            if (data.status_code === 200) {
+                const balance = data.data.balance;
+                const available = Math.floor(balance / 1600);
+                availableCountEl.textContent = available;
+                balanceContainer.style.display = 'flex';
+            }
+        } catch (error) {
+            console.error('Error fetching balance:', error);
+        }
     }
 
     async function loadNetworks() {
@@ -284,6 +304,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearInterval(pollingInterval);
                     updateSessionUI();
                     showToast(`OTP Received: ${data.data.Code}`, 'success');
+
+                    // Update available count locally
+                    let currentAvailable = parseInt(availableCountEl.textContent) || 0;
+                    if (currentAvailable > 0) {
+                        availableCountEl.textContent = currentAvailable - 1;
+                    }
+                    // Also fetch fresh balance to be sure
+                    setTimeout(updateBalanceDisplay, 2000);
 
                     // Clear session after delay
                     setTimeout(() => {
