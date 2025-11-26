@@ -188,6 +188,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function requestNumber() {
         if (!apiToken) return showToast('Please enter API Token', 'error');
+
+        // Client-side balance check
+        const currentAvailable = parseInt(availableCountEl.textContent) || 0;
+        if (currentAvailable <= 0) {
+            return showToast('Đã hết số có thể get', 'error');
+        }
+
         const serviceId = serviceSelect.value;
         if (!serviceId) return showToast('Please select a service', 'error');
 
@@ -212,10 +219,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 startSession(data.data);
                 showToast('Number acquired successfully!', 'success');
             } else {
-                showToast(data.message || 'Failed to get number', 'error');
+                // Use custom message as requested, or fallback to API message if needed
+                // But user specifically asked for "Đã hết số có thể get"
+                showToast('Đã hết số có thể get', 'error');
             }
         } catch (e) {
-            showToast('Request failed', 'error');
+            showToast('Đã hết số có thể get', 'error');
         } finally {
             getNumberBtn.disabled = false;
             getNumberBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i> Get Number';
